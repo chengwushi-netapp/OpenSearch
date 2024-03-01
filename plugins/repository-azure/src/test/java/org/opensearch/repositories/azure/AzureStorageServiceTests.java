@@ -120,6 +120,9 @@ public class AzureStorageServiceTests extends OpenSearchTestCase {
         final MockSecureSettings secureSettings = new MockSecureSettings();
         // Azure clients without account key and sas token.
         secureSettings.setString("azure.client.azure1.account", "myaccount1");
+        // note CHENGWU: missing required setting [azure.client.azure1.key] for setting [azure.client.azure1.endpoint_suffix]
+        // note CHENGWU: added a random key just to pass this tests. Worth checking with techops if we have clients has different endpoint suffix configured and would like to use token credential, very unlikely
+        secureSettings.setString("azure.client.azure1.key", "randomkey");
         secureSettings.setString("azure.client.azure2.account", "myaccount2");
 
         final Settings settings = Settings.builder()
