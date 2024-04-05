@@ -194,7 +194,7 @@ thirdPartyAudit {
     'kotlin.jvm.internal.markers.KMappedMarker',
     'kotlin.reflect.KClass',
     'kotlin.reflect.KDeclarationContainer',
-    'kotlin.sequences.Sequence'
+    'kotlin.sequences.Sequence',
     // Start of the list of classes from the optional compile/provided dependencies used in "com.nimbusds:oauth2-oidc-sdk".
     'com.google.crypto.tink.subtle.Ed25519Sign',
     'com.google.crypto.tink.subtle.Ed25519Sign$KeyPair',
