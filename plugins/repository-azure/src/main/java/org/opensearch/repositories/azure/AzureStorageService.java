@@ -181,6 +181,9 @@ public class AzureStorageService implements AutoCloseable {
         final BlobServiceClientBuilder builder = createClientBuilder(azureStorageSettings);
         // When managed identity is enabled, no connection string will be generated, need to declare the primary uri
         if (azureStorageSettings.usesManagedIdentityCredential()) {
+            System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
+            System.out.println("I am using managed identity in buildClient in AzureStorageService.java");
+            System.out.println("Endpoint is " + getStorageBlobEndpoint(azureStorageSettings).getPrimaryUri());
             builder.endpoint(getStorageBlobEndpoint(azureStorageSettings).getPrimaryUri());
         }
         final NioEventLoopGroup eventLoopGroup = new NioEventLoopGroup(new NioThreadFactory());
@@ -238,6 +241,8 @@ public class AzureStorageService implements AutoCloseable {
     private BlobServiceClientBuilder applyLocationMode(final BlobServiceClientBuilder builder, final AzureStorageSettings settings) {
         final StorageEndpoint endpoint;
         if (settings.usesManagedIdentityCredential()) {
+            System.out.println("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
+            System.out.println("I am using Managed identity in applyLocationMode in AzureStorageService");
             endpoint = getStorageBlobEndpoint(settings);
         } else {
             final StorageConnectionString storageConnectionString = StorageConnectionString.create(settings.getConnectString(), logger);
@@ -275,6 +280,8 @@ public class AzureStorageService implements AutoCloseable {
     private static BlobServiceClientBuilder createClientBuilder(AzureStorageSettings settings) throws InvalidKeyException,
         URISyntaxException {
         if (settings.usesManagedIdentityCredential()) {
+            System.out.println("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY");
+            System.out.println("I am using managed identity in createClientBuilder in AzureStorageService");
             return SocketAccess.doPrivilegedException(
                 () -> new BlobServiceClientBuilder().credential(new ManagedIdentityCredentialBuilder().build())
             );

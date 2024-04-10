@@ -288,6 +288,8 @@ public class AzureBlobStore implements BlobStore {
     }
 
     public Map<String, BlobMetadata> listBlobsByPrefix(String keyPath, String prefix) throws URISyntaxException, BlobStorageException {
+        System.out.println("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
+        System.out.println("I am in listBlobsByPrefix in AzureBlobStore.java");
         final Map<String, BlobMetadata> blobsBuilder = new HashMap<String, BlobMetadata>();
         final Tuple<BlobServiceClient, Supplier<Context>> client = client();
         final BlobContainerClient blobContainer = client.v1().getBlobContainerClient(container);
@@ -300,7 +302,15 @@ public class AzureBlobStore implements BlobStore {
             .setPrefix(keyPath + (prefix == null ? "" : prefix));
 
         SocketAccess.doPrivilegedVoidException(() -> {
+            System.out.println("JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ");
+            System.out.println("I am in SocketAccess.doPrivilegedVoidException listBlobsByPrefix in AzureBlobStore.java");
+            System.out.println("BlobContainerName is " + blobContainer.getBlobContainerName());
+            System.out.println("BlobContainerUrl is " + blobContainer.getBlobContainerUrl());
+            System.out.println("BlobContainerAcountName is " + blobContainer.getAccountName());
+            System.out.println("BlobContainerAcountUrl is " + blobContainer.getAccountUrl());
+            System.out.println("I am in SocketAccess.doPrivilegedVoidException in listBlobsByPrefix going to try the for loop");
             for (final BlobItem blobItem : blobContainer.listBlobsByHierarchy("/", listBlobsOptions, timeout())) {
+                System.out.println("YESSYESYESYESYESYESYESYESYESYESYESYESYE");
                 // Skipping over the prefixes, only look for the blobs
                 if (blobItem.isPrefix() != null && blobItem.isPrefix()) {
                     continue;
@@ -393,7 +403,13 @@ public class AzureBlobStore implements BlobStore {
     }
 
     private Tuple<BlobServiceClient, Supplier<Context>> client() {
-        return service.client(clientName, metricsCollector);
+        System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+        System.out.println("I am inside client() method in AzureBlobStore.java");
+        System.out.println("Client name is: " + clientName);
+        System.out.println("Going to generate the client");
+        Tuple<BlobServiceClient, Supplier<Context>> myClient = service.client(clientName, metricsCollector);
+        System.out.println("DONEXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+        return myClient;
     }
 
     private Duration timeout() {
