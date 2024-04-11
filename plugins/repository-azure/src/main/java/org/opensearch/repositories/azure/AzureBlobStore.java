@@ -106,6 +106,7 @@ public class AzureBlobStore implements BlobStore {
     private final BiConsumer<HttpRequest, HttpResponse> metricsCollector;
 
     public AzureBlobStore(RepositoryMetadata metadata, AzureStorageService service, ThreadPool threadPool) {
+        System.out.println("QQQQQQQQQQQQQQQQQQQQ - I AM initialising AzureBlobStore");
         this.container = Repository.CONTAINER_SETTING.get(metadata.settings());
         this.clientName = Repository.CLIENT_NAME.get(metadata.settings());
         this.service = service;
@@ -181,6 +182,7 @@ public class AzureBlobStore implements BlobStore {
 
     public boolean blobExists(String blob) throws URISyntaxException, BlobStorageException {
         // Container name must be lower case.
+        System.out.println("WWWWWWWWWWWWWWWW - I am in blobExists in AzureBlobStore");
         final Tuple<BlobServiceClient, Supplier<Context>> client = client();
         final BlobContainerClient blobContainer = client.v1().getBlobContainerClient(container);
         return SocketAccess.doPrivilegedException(() -> {
@@ -191,6 +193,7 @@ public class AzureBlobStore implements BlobStore {
     }
 
     public void deleteBlob(String blob) throws URISyntaxException, BlobStorageException {
+        System.out.println("DDDDDDDDDDDDDDDDDDD - I am in deleteBlob in AzureBlobStore");
         final Tuple<BlobServiceClient, Supplier<Context>> client = client();
         // Container name must be lower case.
         final BlobContainerClient blobContainer = client.v1().getBlobContainerClient(container);
@@ -206,6 +209,7 @@ public class AzureBlobStore implements BlobStore {
     }
 
     public DeleteResult deleteBlobDirectory(String path, Executor executor) throws URISyntaxException, BlobStorageException, IOException {
+        System.out.println("DDDDDDDDDDDDDDDDDDD - I am in deleteBlobDirectory in AzureBlobStore");
         final Tuple<BlobServiceClient, Supplier<Context>> client = client();
         final BlobContainerClient blobContainer = client.v1().getBlobContainerClient(container);
         final Collection<Exception> exceptions = Collections.synchronizedList(new ArrayList<>());
@@ -273,6 +277,7 @@ public class AzureBlobStore implements BlobStore {
     }
 
     public InputStream getInputStream(String blob, long position, @Nullable Long length) throws URISyntaxException, BlobStorageException {
+        System.out.println("IIIIIIIIIIIIIIIIIIIIIIII - I am in getInputStream in AzureBlobStore");
         final Tuple<BlobServiceClient, Supplier<Context>> client = client();
         final BlobContainerClient blobContainer = client.v1().getBlobContainerClient(container);
         final BlobClient azureBlob = blobContainer.getBlobClient(blob);
@@ -329,6 +334,7 @@ public class AzureBlobStore implements BlobStore {
     }
 
     public Map<String, BlobContainer> children(BlobPath path) throws URISyntaxException, BlobStorageException {
+        System.out.println("CCCCCCCCCCCCCCCCCCCCC - I am in children in AzureBlobStore");
         final Set<String> blobsBuilder = new HashSet<String>();
         final Tuple<BlobServiceClient, Supplier<Context>> client = client();
         final BlobContainerClient blobContainer = client.v1().getBlobContainerClient(container);
@@ -359,6 +365,7 @@ public class AzureBlobStore implements BlobStore {
 
     public void writeBlob(String blobName, InputStream inputStream, long blobSize, boolean failIfAlreadyExists) throws URISyntaxException,
         BlobStorageException, IOException {
+        System.out.println("WWWWWWWWWWWWWWWWWWWWWW - I am in writeBlob in AzureBlobStore");
         assert inputStream.markSupported()
             : "Should not be used with non-mark supporting streams as their retry handling in the SDK is broken";
         logger.trace(() -> new ParameterizedMessage("writeBlob({}, stream, {})", blobName, blobSize));

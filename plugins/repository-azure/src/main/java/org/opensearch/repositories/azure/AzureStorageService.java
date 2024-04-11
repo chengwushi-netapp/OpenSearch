@@ -43,6 +43,7 @@ import com.azure.core.http.policy.HttpPipelinePolicy;
 import com.azure.core.util.Configuration;
 import com.azure.core.util.Context;
 import com.azure.core.util.logging.ClientLogger;
+import com.azure.identity.ManagedIdentityCredential;
 import com.azure.identity.ManagedIdentityCredentialBuilder;
 import com.azure.storage.blob.BlobServiceClient;
 import com.azure.storage.blob.BlobServiceClientBuilder;
@@ -283,7 +284,12 @@ public class AzureStorageService implements AutoCloseable {
             System.out.println("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY");
             System.out.println("I am using managed identity in createClientBuilder in AzureStorageService");
             return SocketAccess.doPrivilegedException(
-                () -> new BlobServiceClientBuilder().credential(new ManagedIdentityCredentialBuilder().build())
+                () -> {
+                    System.out.println("I am in socketAccess.doPrivilegedException in createClientBuilder");
+                    ManagedIdentityCredential cred = new ManagedIdentityCredentialBuilder().build();
+                    System.out.println("ManagedIdentity Client ID: " + cred.getClientId());
+                    return new BlobServiceClientBuilder().credential(cred);
+                }
             );
         }
         return SocketAccess.doPrivilegedException(() -> new BlobServiceClientBuilder().connectionString(settings.getConnectString()));
