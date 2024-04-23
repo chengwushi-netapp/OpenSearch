@@ -120,6 +120,9 @@ public class AzureStorageServiceTests extends OpenSearchTestCase {
         final MockSecureSettings secureSettings = new MockSecureSettings();
         // Azure clients without account key and sas token.
         secureSettings.setString("azure.client.azure1.account", "myaccount1");
+        // In 1.x, we are required to supply an account key if we want to use endpoint_suffix
+        // Double check with TechOps, and confirmed that we don't have any OpenSearch or Open Distro customers with a custom Azure backup setup.
+        secureSettings.setString("azure.client.azure1.key", "randomkey");
         secureSettings.setString("azure.client.azure2.account", "myaccount2");
 
         final Settings settings = Settings.builder()
