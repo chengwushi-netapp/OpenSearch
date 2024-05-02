@@ -148,17 +148,17 @@ public class AzureStorageServiceTests extends OpenSearchTestCase {
     public void testCreateClientWithInvalidEndpointSuffix() throws IOException {
         final MockSecureSettings secureSettings = new MockSecureSettings();
         secureSettings.setString("azure.client.azure1.account", "myaccount1");
+        // In 1.x, we are required to supply an account key if we want to use endpoint_suffix
+        // Double check with TechOps, and confirmed that we don't have any OpenSearch or Open Distro customers with a custom Azure backup setup.
+        secureSettings.setString("azure.client.azure1.key", "randomkey");
         secureSettings.setString("azure.client.azure2.account", "myaccount2");
         secureSettings.setString("azure.client.azure2.key", encodeKey("mykey12"));
-        secureSettings.setString("azure.client.azure3.account", "myaccount1");
-        secureSettings.setString("azure.client.azure3.sas_token", encodeKey("mysastoken"));
 
         final Settings settings = Settings.builder()
             .setSecureSettings(secureSettings)
             .put("azure.client.azure1.token_credential_type", TokenCredentialType.MANAGED_IDENTITY.name())
             .put("azure.client.azure1.endpoint_suffix", "invalid endpoint suffix")
             .put("azure.client.azure2.endpoint_suffix", "invalid endpoint suffix")
-            .put("azure.client.azure3.endpoint_suffix", "invalid endpoint suffix")
             .build();
 
         try (AzureRepositoryPlugin plugin = pluginWithSettingsValidation(settings)) {
@@ -166,7 +166,6 @@ public class AzureStorageServiceTests extends OpenSearchTestCase {
                 // Expect all clients 1 to fail due to invalid endpoint suffix
                 expectThrows(SettingsException.class, () -> azureStorageService.client("azure1").v1());
                 expectThrows(RuntimeException.class, () -> azureStorageService.client("azure2").v1());
-                expectThrows(RuntimeException.class, () -> azureStorageService.client("azure3").v1());
             }
         }
     }
