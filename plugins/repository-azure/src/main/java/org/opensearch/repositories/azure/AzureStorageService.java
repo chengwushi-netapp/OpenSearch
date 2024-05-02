@@ -123,7 +123,7 @@ public class AzureStorageService implements AutoCloseable {
             Thread t = new Thread(group, new Runnable() {
                 @SuppressWarnings("removal")
                 public void run() {
-                    AccessController.doPrivileged(new PrivilegedAction<>() {
+                    AccessController.doPrivileged(new PrivilegedAction<Void>() {
                         public Void run() {
                             r.run();
                             return null;
